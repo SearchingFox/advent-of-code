@@ -1,52 +1,43 @@
 use std::collections::HashMap;
 
-fn dfs(cur: String, inp: HashMap<String, Vec<String>>, visited: Vec<String>) -> Vec<Vec<String>> {
+fn dfs<'a>(
+    cur: &'a str,
+    inp: &HashMap<&'a str, Vec<&'a str>>,
+    visited: &HashMap<&'a str, u32>,
+    depth: u32,
+) -> u32 {
     if cur == "end" {
-        vec![vec!["end".to_string()]]
+        1
     } else {
-        let mut result: Vec<Vec<String>> = Vec::new();
+        let mut result = 0;
         for i in &inp[&cur] {
             let mut vis = visited.clone();
-            if !vis.contains(&i) {
+            if vis.get(i).unwrap_or(&0) < &depth
+                && vis.iter().filter(|&(a, b)| a != i && b == &2).count() <= 1
+            {
                 if i.chars().next().unwrap().is_lowercase() {
-                    vis.push(i.to_string());
+                    *vis.entry(i).or_default() += 1;
                 }
-
-                for mut j in dfs(i.clone(), inp.clone(), vis) {
-                    j.push(cur.clone());
-                    result.push(j);
-                }
+                result += dfs(i.clone(), &inp, &vis, depth)
             }
         }
         result
     }
 }
+
 fn main() {
-    let tmp = std::fs::read_to_string("day12.txt").unwrap();
-    let graph = tmp1
-        .lines()
-        .filter_map(|x| {
-            let t = x.split('-').collect::<Vec<_>>();
-            // if t[0] != "start"
-            //     && t[1] != "end"
-            //     && t[0].chars().next().unwrap().is_lowercase()
-            //     && t[1].chars().next().unwrap().is_lowercase()
-            // {
-            //     None
-            // } else {
-                Some((t[0].to_string(), t[1].to_string()))
-            //}
-        })
-        .collect::<Vec<_>>();
-    let mut m: HashMap<String, Vec<String>> = HashMap::new();
-    for (i, j) in graph {
-        if j != "start" {
-            m.entry(i.clone()).or_default().push(j.clone());
+    let input = std::fs::read_to_string("day12.txt").unwrap();
+    let mut graph: HashMap<&str, Vec<&str>> = HashMap::new();
+
+    for g in input.lines().map(|x| x.split('-').collect::<Vec<_>>()) {
+        if g[1] != "start" {
+            graph.entry(g[0]).or_default().push(g[1]);
         }
-        if i != "start" && j != "end" {
-            m.entry(j).or_default().push(i);
+        if g[0] != "start" && g[1] != "end" {
+            graph.entry(g[1]).or_default().push(g[0]);
         }
     }
-    let mut a: Vec<String> = Vec::new();
-    let mut b = dfs3("start".to_string(), &m, &b, 0, 0);
-    println!("Part 1: {}", b.len());
+
+    println!("Part 1: {}", dfs("start", &graph, &HashMap::new(), 1));
+    println!("Part 2: {}", dfs("start", &graph, &HashMap::new(), 2));
+}

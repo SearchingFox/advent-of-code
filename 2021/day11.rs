@@ -1,9 +1,15 @@
 fn modify_adj(inp: &mut Vec<Vec<i32>>, i: usize, j: usize) {
     inp[i][j] = -100;
-    for (a, b) in vec![-1, -1, -1, 0, 0, 1, 1, 1]
-        .iter()
-        .zip(vec![-1, 0, 1, -1, 1, -1, 0, 1].iter())
-    {
+    for (a, b) in [
+        (-1, -1),
+        (-1, 0),
+        (-1, 1),
+        (0, -1),
+        (0, 1),
+        (1, -1),
+        (1, 0),
+        (1, 1),
+    ] {
         let x1 = i as i32 + a;
         let y1 = j as i32 + b;
         if x1 >= 0 && x1 < inp.len() as i32 && y1 >= 0 && y1 < inp[0].len() as i32 {
@@ -62,10 +68,10 @@ fn main() {
         }
 
         if cur_count == 100 {
-            println!("Part 2: {}", step);
             break;
         }
     }
 
     println!("Part 1: {}", count);
+    println!("Part 2: {}", step);
 }

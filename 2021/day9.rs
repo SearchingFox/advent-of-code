@@ -4,14 +4,14 @@ fn get_adj((i, j): (usize, usize), max_row: usize, max_column: usize) -> Vec<(us
     if i > 0 {
         adj.push((i - 1, j));
     }
+    if i < max_row - 1 {
+        adj.push((i + 1, j));
+    }
     if j > 0 {
         adj.push((i, j - 1));
     }
     if j < max_column - 1 {
         adj.push((i, j + 1));
-    }
-    if i < max_row - 1 {
-        adj.push((i + 1, j));
     }
 
     adj
