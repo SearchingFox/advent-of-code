@@ -3,7 +3,7 @@ import strutils, sequtils
 var example = "3,4,3,1,2".split(",").mapIt(it.parseInt)
 var part1 = readFile("day6.txt").split(",").mapIt(it.parseInt)
 
-for i in 0..<256:
+for i in 0..<80:
     var t = 0
     for f in 0..<part1.len:
         if part1[f] == 0:
