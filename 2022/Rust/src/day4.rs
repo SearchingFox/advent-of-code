@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections::BTreeSet;
 
 fn str_to_u32((a, b): (&str, &str)) -> (u32, u32) {
     (a.parse().unwrap(), b.parse().unwrap())
@@ -34,16 +34,13 @@ fn part_2_variant(input: &str) -> usize {
     input
         .lines()
         .flat_map(|line| {
-            let str_to_u3 = |(a, b): (&str, &str)| -> _ {
-                (a.parse().unwrap()..=b.parse().unwrap()).collect::<HashSet<u32>>()
+            let str_to_u3 = |(a, b): (&str, &str)| {
+                (a.parse().unwrap()..=b.parse().unwrap()).collect::<BTreeSet<u32>>()
             };
             let (p1, p2) = line.split_once(',').unwrap();
 
-            let t = str_to_u3(p1.split_once('-').unwrap())
-                .intersection(&str_to_u3(p2.split_once('-').unwrap()))
-                .cloned()
-                .collect::<Vec<u32>>();
-            t.get(0).cloned()
+            let t = &str_to_u3(p1.split_once('-').unwrap()) & &str_to_u3(p2.split_once('-').unwrap());
+            t.first().cloned()
         })
         .count()
 }
