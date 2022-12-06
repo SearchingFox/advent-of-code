@@ -1,16 +1,10 @@
-use std::collections::HashMap;
-
 fn main() {
-    let tmp = std::fs::read_to_string("day7.txt").unwrap();
-    let tmp2 = "16,1,2,0,4,2,7,1,2,14";
-    let mut input = tmp.split(',').map(|x| x.parse::<i32>().unwrap()).collect::<Vec<_>>();
-    input.sort();
-    let mut m: HashMap<i32, i32> = HashMap::new();
-    for i in input.clone() {
-        *m.entry(i).or_default() += 1;
-    }
-    let max = m.into_iter().max_by_key(|(_, v)| *v).map(|(k, _)| k).unwrap();
-    let res:i32 = input.iter().map(|x| (x - max).abs()).sum();
-    // m.into_iter().filter(|(_, v)| *v == 2).map(|(k, _)| k).collect::<Vec<_>>();
-    println!("{}, {}, {}", res, max, input.iter().sum::<i32>() / input.len() as i32);
+    let tmp = std::fs::read_to_string("../Input/day7.txt").unwrap();
+    let input: Vec<u32> = tmp.split(',').map(|x| x.parse().unwrap()).collect();
+    
+    let part_1: u32 = (1..*input.iter().max().unwrap()).map(|pos| input.iter().map(|y| y.abs_diff(pos)).sum()).min().unwrap();
+    let part_2: u32 = (1..*input.iter().max().unwrap()).map(|pos| input.iter().map(|y| (1..=y.abs_diff(pos)).sum::<u32>()).sum()).min().unwrap();
+
+    println!("Part 1: {}", part_1);
+    println!("Part 2: {}", part_2);
 }

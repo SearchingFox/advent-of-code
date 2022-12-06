@@ -30,13 +30,16 @@ pub fn part_1(input: &str) -> String {
             from_value[..size]
                 .iter()
                 .rev()
-                .chain(containers.get(&to).unwrap().iter())
+                .chain(containers.get(&to).unwrap())
                 .cloned()
                 .collect(),
         );
     }
 
-    containers.values().map(|v| v.first().unwrap()).cloned().collect::<String>()
+    containers
+        .values()
+        .flat_map(|v| v.first())
+        .collect::<String>()
 }
 
 pub fn part_2(input: &str) -> String {
@@ -57,5 +60,8 @@ pub fn part_2(input: &str) -> String {
         );
     }
 
-    containers.values().map(|v| v.first().unwrap()).cloned().collect::<String>()
+    containers
+        .values()
+        .flat_map(|v| v.first())
+        .collect::<String>()
 }
