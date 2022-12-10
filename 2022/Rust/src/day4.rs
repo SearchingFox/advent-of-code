@@ -39,7 +39,8 @@ fn part_2_variant(input: &str) -> usize {
             };
             let (p1, p2) = line.split_once(',').unwrap();
 
-            let t = &str_to_u3(p1.split_once('-').unwrap()) & &str_to_u3(p2.split_once('-').unwrap());
+            let t =
+                &str_to_u3(p1.split_once('-').unwrap()) & &str_to_u3(p2.split_once('-').unwrap());
             t.first().cloned()
         })
         .count()
